@@ -24,14 +24,15 @@ public class Movie {
     @Relationship(type="DIRECTED", direction = Relationship.INCOMING)
     Set<Director> directors;
 
-    @Relationship(type = "ACTS_IN", direction = Relationship.INCOMING)
+
     Set<Actor> actors;
-/*
+
+    @Relationship(type = "ACTS_IN", direction = Relationship.INCOMING)
     Set<Role> roles;
 
-    @Relationship(type = "RATED", direction = Relationship.INCOMING)
-    List<Rating> ratings;   //TODO was @Fetch Iterable<Rating>*/
-
+   /* @Relationship(type = "RATED", direction = Relationship.INCOMING)
+    List<Rating> ratings;   //TODO was @Fetch Iterable<Rating>
+*/
     private String language;
     private String imdbId;
     private String tagline;
@@ -57,10 +58,9 @@ public class Movie {
         return actors;
     }
 
-  /*  public Collection<Role> getRoles() {
+    public Collection<Role> getRoles() {
         return roles;
     }
-*/
     public int getYear() {
         if (releaseDate==null) return 0;
         Calendar cal = Calendar.getInstance();

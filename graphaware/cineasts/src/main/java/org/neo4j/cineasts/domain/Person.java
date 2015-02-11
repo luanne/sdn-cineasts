@@ -12,6 +12,7 @@ import java.util.Date;
  */
 @NodeEntity
 public class Person {
+
     @GraphId
     Long nodeId;
     String id; //TODO validation on id

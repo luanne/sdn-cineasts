@@ -11,10 +11,8 @@ import java.util.HashSet;
  */
 public class Actor extends Person {
 
-    //@Relationship(type = "ACTS_IN", direction = Relationship.OUTGOING)
-   // Collection<Role> roles=new HashSet<Role>();
-
-    Role role;
+    @Relationship(type = "ACTS_IN", direction = Relationship.OUTGOING)
+    Collection<Role> roles=new HashSet<Role>();
 
     public Actor() {
     }
@@ -27,15 +25,7 @@ public class Actor extends Person {
         super(id,null);
     }
 
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    /* public Iterable<Role> getRoles() {
+     public Iterable<Role> getRoles() {
         return roles;
     }
 
@@ -43,6 +33,6 @@ public class Actor extends Person {
         final Role role = new Role(this, movie, roleName);
         roles.add(role);
         return role;
-    }*/
+    }
 
 }
