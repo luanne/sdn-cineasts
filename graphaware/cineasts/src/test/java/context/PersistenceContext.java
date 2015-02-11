@@ -14,6 +14,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 public class PersistenceContext extends Neo4jConfiguration {
 
+    public static final int NEO4J_PORT = 7479;
+
     @Override
     public SessionFactory getSessionFactory() {
         return new SessionFactory("org.neo4j.cineasts.domain");
@@ -21,12 +23,11 @@ public class PersistenceContext extends Neo4jConfiguration {
 
     @Bean
     public Neo4jServer neo4jServer() {
-        return new RemoteServer("http://localhost:7575");
+        return new RemoteServer("http://localhost:" + NEO4J_PORT);
     }
 
     @Override
     @Bean
-    @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
     public Session getSession() throws Exception {
         return super.getSession(); }
 }

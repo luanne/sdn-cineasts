@@ -14,7 +14,7 @@ import java.util.Date;
 public class Person {
     @GraphId
     Long nodeId;
-    String id;
+    String id; //TODO validation on id
     String name;   //TODO name was indexed, fulltext, indexName = people
     private Date birthday;
     private String birthplace;
@@ -96,21 +96,24 @@ public class Person {
         return profileImageUrl;
     }
 
+    public Long getNodeId() {
+        return nodeId;     //TODO drop this getter once we expose findBy* methods
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Person)) return false;
 
         Person person = (Person) o;
-        if (nodeId == null) return super.equals(o);
-        return nodeId.equals(person.nodeId);
 
+        if (!id.equals(person.id)) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return nodeId != null ? nodeId.hashCode() : super.hashCode();
+        return id.hashCode();
     }
-
-
 }
