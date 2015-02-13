@@ -1,8 +1,9 @@
 package org.neo4j.cineasts.domain;
 
 
-import org.springframework.data.neo4j.ogm.annotation.GraphId;
-import org.springframework.data.neo4j.ogm.annotation.NodeEntity;
+
+import org.neo4j.ogm.annotation.GraphId;
+import org.neo4j.ogm.annotation.NodeEntity;
 
 import java.util.Date;
 

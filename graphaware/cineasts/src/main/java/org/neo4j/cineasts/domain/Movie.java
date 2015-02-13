@@ -1,9 +1,10 @@
 package org.neo4j.cineasts.domain;
 
 
-import org.springframework.data.neo4j.ogm.annotation.GraphId;
-import org.springframework.data.neo4j.ogm.annotation.NodeEntity;
-import org.springframework.data.neo4j.ogm.annotation.Relationship;
+
+import org.neo4j.ogm.annotation.GraphId;
+import org.neo4j.ogm.annotation.NodeEntity;
+import org.neo4j.ogm.annotation.Relationship;
 
 import java.util.*;
 
@@ -30,9 +31,9 @@ public class Movie {
     @Relationship(type = "ACTS_IN", direction = Relationship.INCOMING)
     Set<Role> roles;
 
-   /* @Relationship(type = "RATED", direction = Relationship.INCOMING)
-    List<Rating> ratings;   //TODO was @Fetch Iterable<Rating>
-*/
+    @Relationship(type = "RATED", direction = Relationship.INCOMING)
+    List<Rating> ratings=new ArrayList<>();   //TODO was @Fetch
+
     private String language;
     private String imdbId;
     private String tagline;
@@ -61,6 +62,7 @@ public class Movie {
     public Collection<Role> getRoles() {
         return roles;
     }
+
     public int getYear() {
         if (releaseDate==null) return 0;
         Calendar cal = Calendar.getInstance();
@@ -81,7 +83,7 @@ public class Movie {
         return description;
     }
 
-   /* public int getStars() {
+    public int getStars() {
         Iterable<Rating> allRatings = ratings;
 
         if (allRatings == null) return 0;
@@ -93,10 +95,15 @@ public class Movie {
         return count==0 ? 0 : stars / count;
     }
 
-    public Collection<Rating> getRatings() {
-        Iterable<Rating> allRatings = ratings;
-        return allRatings == null ? Collections.<Rating>emptyList() : ratings;
-    }*/
+    public List<Rating> getRatings() {
+        //Iterable<Rating> allRatings = ratings;
+       // return allRatings == null ? Collections.<Rating>emptyList() : ratings;
+        return ratings;
+    }
+
+    public void setRatings(List<Rating> ratings) {
+        this.ratings = ratings;
+    }
 
     public void setTitle(String title) {
         this.title=title;

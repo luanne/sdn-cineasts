@@ -1,6 +1,7 @@
 package org.neo4j.cineasts.domain;
 
-import org.springframework.data.neo4j.ogm.annotation.Relationship;
+
+import org.neo4j.ogm.annotation.*;
 
 import java.util.Collection;
 import java.util.HashSet;
