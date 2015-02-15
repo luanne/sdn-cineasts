@@ -5,6 +5,7 @@ import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -22,8 +23,8 @@ public class User {
     String info;
     //private Roles[] roles;
 
-    @Relationship(type = RATED, direction = Relationship.OUTGOING)
-    List<Rating> ratings; //Was @Fetch
+    @Relationship(type = "RATED")
+    private Set<Rating> ratings = new HashSet<>();
 
     @Relationship(type = FRIEND, direction = Relationship.UNDIRECTED)
     Set<User> friends; //Was fetch
@@ -57,15 +58,16 @@ public class User {
 
     public Rating rate(Movie movie, int stars, String comment) {
         if(ratings==null) {
-            ratings = new ArrayList<>();
+            ratings = new HashSet<>();
         }
 
         Rating rating = new Rating(this,movie,stars,comment);
         ratings.add(rating);
+        movie.addRating(rating);
         return rating;
     }
 
-    public List<Rating> getRatings() {
+    public Set<Rating> getRatings() {
         return ratings;
     }
 

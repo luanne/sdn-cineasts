@@ -32,7 +32,7 @@ public class Movie {
     Set<Role> roles;
 
     @Relationship(type = "RATED", direction = Relationship.INCOMING)
-    List<Rating> ratings=new ArrayList<>();   //TODO was @Fetch
+    private Set<Rating> ratings = new HashSet<>();
 
     private String language;
     private String imdbId;
@@ -95,14 +95,18 @@ public class Movie {
         return count==0 ? 0 : stars / count;
     }
 
-    public List<Rating> getRatings() {
+    public Set<Rating> getRatings() {
         //Iterable<Rating> allRatings = ratings;
        // return allRatings == null ? Collections.<Rating>emptyList() : ratings;
         return ratings;
     }
 
-    public void setRatings(List<Rating> ratings) {
+    public void setRatings(Set<Rating> ratings) {
         this.ratings = ratings;
+    }
+
+    public void addRating(Rating rating) {
+        ratings.add(rating);
     }
 
     public void setTitle(String title) {

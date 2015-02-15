@@ -77,18 +77,16 @@ public class Rating {
 
         if (stars != rating.stars) return false;
         if (comment != null ? !comment.equals(rating.comment) : rating.comment != null) return false;
-        if (id != null ? !id.equals(rating.id) : rating.id != null) return false;
-        if (!movie.equals(rating.movie)) return false;
-        if (!user.equals(rating.user)) return false;
+        if (movie != null ? !movie.equals(rating.movie) : rating.movie != null) return false;
+        if (user != null ? !user.equals(rating.user) : rating.user != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + user.hashCode();
-        result = 31 * result + movie.hashCode();
+        int result = user != null ? user.hashCode() : 0;
+        result = 31 * result + (movie != null ? movie.hashCode() : 0);
         result = 31 * result + stars;
         result = 31 * result + (comment != null ? comment.hashCode() : 0);
         return result;

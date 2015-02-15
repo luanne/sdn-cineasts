@@ -14,6 +14,8 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.Collections;
+
 import static org.junit.Assert.assertEquals;
 
 @ContextConfiguration(classes = {PersistenceContext.class})
@@ -110,23 +112,55 @@ public class DomainTests extends WrappingServerIntegrationTest {
     @Test
     public void userCanRateMovie() {
         Movie forrest = new Movie("1","Forrest Gump");
-        forrest =  movieRepository.save(forrest);
+        //forrest =  movieRepository.save(forrest);
 
         User micha = new User("micha","Micha","password");
-       // micha = userRepository.save(micha);
+        micha = userRepository.save(micha);
 
         Rating awesome = micha.rate(forrest, 5, "Awesome");
         micha = userRepository.save(micha);
 
 
         User foundMicha = userRepository.findOne(micha.getId());
-        assertEquals(1,foundMicha.getRatings().size());  //Works
+        assertEquals(1,foundMicha.getRatings().size());
+
         Movie foundForrest = movieRepository.findOne(forrest.getNodeId());
-        assertEquals(1,foundForrest.getRatings().size()); //No ratings loaded
-       /* Rating rating = foundForrest.getRatings().get(0);
+        assertEquals(1,foundForrest.getRatings().size());
+
+        Rating rating = foundForrest.getRatings().iterator().next();
         assertEquals(awesome,rating);
         assertEquals("Awesome",rating.getComment());
         assertEquals(5,rating.getStars());
-        assertEquals(5,foundForrest.getStars(),0);*/
+        assertEquals(5,foundForrest.getStars(),0);
     }
+
+    @Test
+    public void movieCanBeRatedByUser() {
+        Movie forrest = new Movie("1","Forrest Gump");
+
+        User micha = new User("micha","Micha","password");
+
+        Rating awesome = new Rating(micha,forrest,5,"Awesome");
+
+        forrest.addRating(awesome);
+        movieRepository.save(forrest);
+
+        User foundMicha = userRepository.findOne(micha.getId());
+        //TODO debug this
+        /*
+        org.neo4j.ogm.session.result.ResultProcessingException: "errors":[{"code":"Neo.DatabaseError.Statement.ExecutionFailure","message":null,"stackTrace":"java.lang.NullPointerException\n\tat org.neo4j.cypher.internal.compiler.v2_1.executionplan.builders.GetGraphElements$.getElements(GetGraphElements.scala:45)\n\tat org.neo4j.cypher.internal.compiler.v2_1.executionplan.builders.GetGraphElements$.getOptionalElements(GetGraphElements.scala:28)\n\tat org.neo4j.cypher.internal.compiler.v2_1.commands.EntityProducerFactory$$anonfun$3$$anonfun$applyOrElse$4.apply(EntityProducerFactory.scala:82)\n\tat org.neo4j.cypher.internal.compiler.v2_1.commands.EntityProducerFactory$$anonfun$3$$anonfun$applyOrElse$4.apply(EntityProducerFactory.scala:80)\n\tat org.neo4j.cypher.internal.compiler.v2_1.commands.EntityProducerFactory$$anon$1.apply(EntityProducerFactory.scala:36)\n\tat org.neo4j.cypher.internal.compiler.v2_1.commands.EntityProducerFactory$$anon$1.apply(EntityProducerFactory.scala:35)\n\tat org.neo4j.cypher.internal.compiler.v2_1.pipes.matching.MonoDirectionalTraversalMatcher.findMatchingPaths(MonodirectionalTraversalMatcher.scala:46)\n\tat org.neo4j.cypher.internal.compiler.v2_1.pipes.TraversalMatchPipe$$anonfun$internalCreateResults$1.apply(TraversalMatchPipe.scala:36)\n\tat org.neo4j.cypher.internal.compiler.v2_1.pipes.TraversalMatchPipe$$anonfun$internalCreateResults$1.apply(TraversalMatchPipe.scala:33)\n\tat scala.collection.Iterator$$anon$13.hasNext(Iterator.scala:371)\n\tat scala.collection.Iterator$$anon$11.hasNext(Iterator.scala:327)\n\tat scala.collection.Iterator$class.foreach(Iterator.scala:727)\n\tat scala.collection.AbstractIterator.foreach(Iterator.scala:1157)\n\tat org.neo4j.cypher.internal.compiler.v2_1.pipes.EagerAggregationPipe.internalCreateResults(EagerAggregationPipe.scala:78)\n\tat org.neo4j.cypher.internal.compiler.v2_1.pipes.PipeWithSource.createResults(Pipe.scala:105)\n\tat org.neo4j.cypher.internal.compiler.v2_1.pipes.PipeWithSource.createResults(Pipe.scala:102)\n\tat org.neo4j.cypher.internal.compiler.v2_1.executionplan.ExecutionPlanBuilder$$anonfun$getExecutionPlanFunction$1$$anonfun$apply$2.apply(ExecutionPlanBuilder.scala:120)\n\tat org.neo4j.cypher.internal.compiler.v2_1.executionplan.ExecutionPlanBuilder$$anonfun$getExecutionPlanFunction$1$$anonfun$apply$2.apply(ExecutionPlanBuilder.scala:119)\n\tat org.neo4j.cypher.internal.compiler.v2_1.executionplan.ExecutionWorkflowBuilder.runWithQueryState(ExecutionPlanBuilder.scala:168)\n\tat org.neo4j.cypher.internal.compiler.v2_1.executionplan.ExecutionPlanBuilder$$anonfun$getExecutionPlanFunction$1.apply(ExecutionPlanBuilder.scala:118)\n\tat org.neo4j.cypher.internal.compiler.v2_1.executionplan.ExecutionPlanBuilder$$anonfun$getExecutionPlanFunction$1.apply(ExecutionPlanBuilder.scala:103)\n\tat org.neo4j.cypher.internal.compiler.v2_1.executionplan.ExecutionPlanBuilder$$anon$1.execute(ExecutionPlanBuilder.scala:68)\n\tat org.neo4j.cypher.internal.compiler.v2_1.executionplan.ExecutionPlanBuilder$$anon$1.execute(ExecutionPlanBuilder.scala:67)\n\tat org.neo4j.cypher.internal.ExecutionPlanWrapperForV2_1.execute(CypherCompiler.scala:159)\n\tat org.neo4j.cypher.ExecutionEngine.execute(ExecutionEngine.scala:76)\n\tat org.neo4j.cypher.ExecutionEngine.execute(ExecutionEngine.scala:71)\n\tat org.neo4j.cypher.javacompat.ExecutionEngine.execute(ExecutionEngine.java:84)\n\tat org.neo4j.server.rest.transactional.TransactionHandle.executeStatements(TransactionHandle.java:277)\n\tat org.neo4j.server.rest.transactional.TransactionHandle.commit(TransactionHandle.java:139)\n\tat org.neo4j.server.rest.web.TransactionalService$2.write(TransactionalService.java:202)\n\tat com.sun.jersey.core.impl.provider.entity.StreamingOutputProvider.writeTo(StreamingOutputProvider.java:71)\n\tat com.sun.jersey.core.impl.provider.entity.StreamingOutputProvider.writeTo(StreamingOutputProvider.java:57)\n\tat com.sun.jersey.spi.container.ContainerResponse.write(ContainerResponse.java:306)\n\tat com.sun.jersey.server.impl.application.WebApplicationImpl._handleRequest(WebApplicationImpl.java:1437)\n\tat com.sun.jersey.server.impl.application.WebApplicationImpl.handleRequest(WebApplicationImpl.java:1349)\n\tat com.sun.jersey.server.impl.application.WebApplicationImpl.handleRequest(WebApplicationImpl.java:1339)\n\tat com.sun.jersey.spi.container.servlet.WebComponent.service(WebComponent.java:416)\n\tat com.sun.jersey.spi.container.servlet.ServletContainer.service(ServletContainer.java:537)\n\tat com.sun.jersey.spi.container.servlet.ServletContainer.service(ServletContainer.java:699)\n\tat javax.servlet.http.HttpServlet.service(HttpServlet.java:848)\n\tat org.eclipse.jetty.servlet.ServletHolder.handle(ServletHolder.java:698)\n\tat org.eclipse.jetty.servlet.ServletHandler.doHandle(ServletHandler.java:505)\n\tat org.eclipse.jetty.server.session.SessionHandler.doHandle(SessionHandler.java:211)\n\tat org.eclipse.jetty.server.handler.ContextHandler.doHandle(ContextHandler.java:1096)\n\tat org.eclipse.jetty.servlet.ServletHandler.doScope(ServletHandler.java:432)\n\tat org.eclipse.jetty.server.session.SessionHandler.doScope(SessionHandler.java:175)\n\tat org.eclipse.jetty.server.handler.ContextHandler.doScope(ContextHandler.java:1030)\n\tat org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:136)\n\tat org.eclipse.jetty.server.handler.HandlerList.handle(HandlerList.java:52)\n\tat org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:97)\n\tat org.eclipse.jetty.server.Server.handle(Server.java:445)\n\tat org.eclipse.jetty.server.HttpChannel.handle(HttpChannel.java:268)\n\tat org.eclipse.jetty.server.HttpConnection.onFillable(HttpConnection.java:229)\n\tat org.eclipse.jetty.io.AbstractConnection$ReadCallback.run(AbstractConnection.java:358)\n\tat org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:601)\n\tat org.eclipse.jetty.util.thread.QueuedThreadPool$3.run(QueuedThreadPool.java:532)\n\tat java.lang.Thread.run(Thread.java:724)\n"}]}
+	at org.neo4j.ogm.session.response.JsonResponse.parseErrors(JsonResponse.java:113)
+         */
+        assertEquals(1,foundMicha.getRatings().size());
+
+        Movie foundForrest = movieRepository.findOne(forrest.getNodeId());
+        assertEquals(1,foundForrest.getRatings().size());
+
+        Rating rating = foundForrest.getRatings().iterator().next();
+        assertEquals(awesome,rating);
+        assertEquals("Awesome",rating.getComment());
+        assertEquals(5,rating.getStars());
+        assertEquals(5,foundForrest.getStars(),0);
+    }
+
 }
