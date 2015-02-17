@@ -1,7 +1,7 @@
 package org.neo4j.cineasts.domain;
 
 
-import org.neo4j.ogm.annotation.*;
+import org.neo4j.ogm.annotation.Relationship;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -13,7 +13,7 @@ import java.util.HashSet;
 public class Actor extends Person {
 
     @Relationship(type = "ACTS_IN", direction = Relationship.OUTGOING)
-    Collection<Role> roles=new HashSet<Role>();
+    Collection<Role> roles = new HashSet<Role>();
 
     public Actor() {
     }
@@ -23,10 +23,10 @@ public class Actor extends Person {
     }
 
     public Actor(String id) {
-        super(id,null);
+        super(id, null);
     }
 
-     public Iterable<Role> getRoles() {
+    public Iterable<Role> getRoles() {
         return roles;
     }
 

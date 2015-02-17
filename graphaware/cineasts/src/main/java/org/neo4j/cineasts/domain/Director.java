@@ -13,7 +13,7 @@ import java.util.Set;
 public class Director extends Person {
 
     @Relationship(type = "DIRECTED")
-    private Set<Movie> directedMovies=new HashSet<Movie>();
+    private Set<Movie> directedMovies = new HashSet<Movie>();
 
     public Director(String id, String name) {
         super(id, name);
@@ -24,7 +24,7 @@ public class Director extends Person {
 
 
     public Director(String id) {
-        super(id,null);
+        super(id, null);
     }
 
     public Set<Movie> getDirectedMovies() {

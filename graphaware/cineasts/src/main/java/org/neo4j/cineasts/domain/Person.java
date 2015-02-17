@@ -1,7 +1,6 @@
 package org.neo4j.cineasts.domain;
 
 
-
 import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
 
@@ -37,6 +36,10 @@ public class Person {
         return id;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }
@@ -50,56 +53,52 @@ public class Person {
         return String.format("%s [%s]", name, id);
     }
 
-    public void setBirthday(Date birthday) {
-        this.birthday = birthday;
-    }
-
-    public void setBirthplace(String birthplace) {
-        this.birthplace = birthplace;
-    }
-
-    public void setBiography(String biography) {
-        this.biography = biography;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
-
-    public void setLastModified(Date lastModified) {
-        this.lastModified = lastModified;
-    }
-
     public Date getBirthday() {
         return birthday;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
     }
 
     public String getBirthplace() {
         return birthplace;
     }
 
+    public void setBirthplace(String birthplace) {
+        this.birthplace = birthplace;
+    }
+
     public String getBiography() {
         return biography;
+    }
+
+    public void setBiography(String biography) {
+        this.biography = biography;
     }
 
     public Integer getVersion() {
         return version;
     }
 
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
     public Date getLastModified() {
         return lastModified;
     }
 
-    public void setProfileImageUrl(String profileImageUrl) {
-        this.profileImageUrl = profileImageUrl;
+    public void setLastModified(Date lastModified) {
+        this.lastModified = lastModified;
     }
 
     public String getProfileImageUrl() {
         return profileImageUrl;
     }
 
-    public Long getNodeId() {
-        return nodeId;     //TODO drop this getter once we expose findBy* methods
+    public void setProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
     }
 
     @Override

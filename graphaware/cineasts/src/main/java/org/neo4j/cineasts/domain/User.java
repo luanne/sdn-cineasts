@@ -1,33 +1,31 @@
 package org.neo4j.cineasts.domain;
 
+
 import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
+import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
+import org.springframework.security.core.GrantedAuthority;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @NodeEntity
 public class User {
-    @GraphId
-    Long nodeId;
-
-    private static final String SALT = "cewuiqwzie";
     public static final String FRIEND = "FRIEND";
     public static final String RATED = "RATED";
+    private static final String SALT = "cewuiqwzie";
+    @GraphId
+    Long nodeId;
     String login;  //TODO was indexed
     String name;
     String password;
     String info;
-    //private Roles[] roles;
-
+    @Relationship(type = FRIEND, direction = Relationship.UNDIRECTED)
+    Set<User> friends = new HashSet<>(); //Was fetch
+    private Roles[] roles;
     @Relationship(type = "RATED")
     private Set<Rating> ratings = new HashSet<>();
-
-    @Relationship(type = FRIEND, direction = Relationship.UNDIRECTED)
-    Set<User> friends; //Was fetch
 
     public User() {
     }
@@ -38,18 +36,16 @@ public class User {
         this.password = password;
     }
 
-    /* public User(String login, String name, String password, Roles... roles) {
+    public User(String login, String name, String password, Roles... roles) {
         this.login = login;
         this.name = name;
         this.password = encode(password);
         this.roles = roles;
-    }*/
-/*
+    }
 
     private String encode(String password) {
         return new Md5PasswordEncoder().encodePassword(password, SALT);
     }
-*/
 
 
     public void addFriend(User friend) {
@@ -57,11 +53,11 @@ public class User {
     }
 
     public Rating rate(Movie movie, int stars, String comment) {
-        if(ratings==null) {
+        if (ratings == null) {
             ratings = new HashSet<>();
         }
 
-        Rating rating = new Rating(this,movie,stars,comment);
+        Rating rating = new Rating(this, movie, stars, comment);
         ratings.add(rating);
         movie.addRating(rating);
         return rating;
@@ -80,14 +76,17 @@ public class User {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public Set<User> getFriends() {
         return friends;
     }
 
-   /* public Roles[] getRole() {
+    public Roles[] getRole() {
         return roles;
     }
-*/
 
     public String getLogin() {
         return login;
@@ -105,31 +104,14 @@ public class User {
         this.info = info;
     }
 
-   /* public void updatePassword(String old, String newPass1, String newPass2) {
+    public void updatePassword(String old, String newPass1, String newPass2) {
         if (!password.equals(encode(old))) throw new IllegalArgumentException("Existing Password invalid");
         if (!newPass1.equals(newPass2)) throw new IllegalArgumentException("New Passwords don't match");
         this.password = encode(newPass1);
-    }*/
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public boolean isFriend(User other) {
         return other != null && getFriends().contains(other);
-    }
-
-   /* public enum Roles implements GrantedAuthority {
-        ROLE_USER, ROLE_ADMIN;
-
-        @Override
-        public String getAuthority() {
-            return name();
-        }
-    }*/
-
-    public Long getId() {
-        return nodeId;
     }
 
     @Override
@@ -150,5 +132,14 @@ public class User {
         int result = nodeId != null ? nodeId.hashCode() : 0;
         result = 31 * result + (login != null ? login.hashCode() : 0);
         return result;
+    }
+
+    public enum Roles implements GrantedAuthority {
+        ROLE_USER, ROLE_ADMIN;
+
+        @Override
+        public String getAuthority() {
+            return name();
+        }
     }
 }

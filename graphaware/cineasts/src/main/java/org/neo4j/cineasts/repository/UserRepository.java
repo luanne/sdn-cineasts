@@ -7,7 +7,8 @@ import org.springframework.data.neo4j.repository.GraphRepository;
  * @author mh
  * @since 02.04.11
  */
-public interface UserRepository extends GraphRepository<User> {
+public interface UserRepository extends GraphRepository<User>,
+        CineastsUserDetailsService {
 
     User findByLogin(String login);
 }
