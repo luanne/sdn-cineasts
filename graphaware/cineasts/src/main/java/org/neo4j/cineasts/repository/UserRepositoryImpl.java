@@ -58,7 +58,8 @@ public class UserRepositoryImpl implements CineastsUserDetailsService {
         if (found!=null) throw new RuntimeException("Login already taken: "+login);
         if (name==null || name.isEmpty()) throw new RuntimeException("No name provided.");
         if (password==null || password.isEmpty()) throw new RuntimeException("No password provided.");
-        User user=userRepository.save(new User(login,name,password,User.Roles.ROLE_USER));
+        //User user=userRepository.save(new User(login,name,password,User.Roles.ROLE_USER)); //TODO
+        User user=userRepository.save(new User(login,name,password));
         setUserInSession(user);
         return user;
     }

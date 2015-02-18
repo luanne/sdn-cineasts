@@ -17,6 +17,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.util.Collections;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 @ContextConfiguration(classes = {PersistenceContext.class})
@@ -40,6 +41,8 @@ public class DomainTests extends WrappingServerIntegrationTest {
 
     @Autowired
     UserRepository userRepository;
+
+
 
     @Test
     public void shouldAllowActorCreation() {
@@ -174,4 +177,19 @@ public class DomainTests extends WrappingServerIntegrationTest {
     }
 
 
+    public void ratingForAMovieByAUserCanBeRetrieved() {
+        Movie forrest = new Movie("1","Forrest Gump");
+
+        User micha = new User("micha","Micha","password");
+        micha = userRepository.save(micha);
+
+        Rating awesome = micha.rate(forrest, 5, "Awesome");
+        micha = userRepository.save(micha);
+
+        Movie foundForrest = movieRepository.findByProperty("id","1").iterator().next();
+        Rating foundAwesome = userRepository.findUsersRatingForMovie(foundForrest,micha);
+        //TODO Infinit recursion
+        assertNotNull(foundAwesome);
+        assertEquals(foundAwesome,awesome);
+    }
 }

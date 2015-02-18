@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @EnableNeo4jRepositories("org.neo4j.cineasts.repository")
 @EnableTransactionManagement
+@ComponentScan("org.neo4j.cineasts")
 public class PersistenceContext extends Neo4jConfiguration {
 
     public static final int NEO4J_PORT = 7479;
