@@ -16,30 +16,34 @@ public class MovieDbJsonMapper {
 
     public void mapToMovie(Map data, Movie movie) {
         try {
-            movie.setTitle((String) data.get("name"));
-            movie.setLanguage((String) data.get("language"));
+            movie.setTitle((String) data.get("title"));
+            movie.setLanguage((String) data.get("original_language"));
             movie.setImdbId((String) data.get("imdb_id"));
             movie.setTagline((String) data.get("tagline"));
             movie.setDescription(limit((String) data.get("overview"), 500));
-            movie.setReleaseDate(toDate(data, "released", "yyyy-MM-dd"));
+            movie.setReleaseDate(toDate(data, "release_date", "yyyy-MM-dd"));
             movie.setRuntime((Integer) data.get("runtime"));
             movie.setHomepage((String) data.get("homepage"));
-            movie.setTrailer((String) data.get("trailer"));
+            movie.setTrailer((String) data.get("trailer")); //TODO missing
             movie.setGenre(extractFirst(data, "genres", "name"));
-            movie.setStudio(extractFirst(data,"studios", "name"));
-            movie.setVersion((Integer)data.get("version"));
-            movie.setLastModified(toDate(data,"last_modified_at","yyyy-MM-dd HH:mm:ss"));
-            movie.setImageUrl(selectImageUrl((List<Map>) data.get("posters"), "poster", "mid"));
+            movie.setStudio(extractFirst(data, "production_companies", "name"));
+            movie.setVersion((Integer) data.get("version"));    //TODO missing
+            movie.setLastModified(toDate(data, "last_modified_at", "yyyy-MM-dd HH:mm:ss")); //TODO missing
+            movie.setImageUrl((String) data.get("poster_path"));
         } catch (Exception e) {
             throw new MovieDbException("Failed to map json for movie", e);
         }
     }
 
     private String selectImageUrl(List<Map> data, final String type, final String size) {
-        if (data==null) return null;
+        if (data == null) {
+            return null;
+        }
         for (Map entry : data) {
             Map image = (Map) entry.get("image");
-            if (image.get("type").equals(type) && image.get("size").equals(size)) return (String) image.get("url");
+            if (image.get("type").equals(type) && image.get("size").equals(size)) {
+                return (String) image.get("url");
+            }
         }
         return null;
     }
@@ -47,14 +51,18 @@ public class MovieDbJsonMapper {
 
     private String extractFirst(Map data, String field, String property) {
         List<Map> inner = (List<Map>) data.get(field);
-        if (inner == null || inner.isEmpty()) return null;
+        if (inner == null || inner.isEmpty()) {
+            return null;
+        }
         return (String) inner.get(0).get(property);
     }
 
     private Date toDate(Map data, String field, final String pattern) throws ParseException {
         try {
             String dateString = (String) data.get(field);
-            if (dateString == null || dateString.isEmpty()) return null;
+            if (dateString == null || dateString.isEmpty()) {
+                return null;
+            }
             return new SimpleDateFormat(pattern).parse(dateString);
         } catch (Exception e) {
             return null;
@@ -620,18 +628,20 @@ they reach her building to hear horrifying screams -- which begin a long nightma
             person.setBirthday(toDate(data, "birthday", "yyyy-MM-dd"));
             person.setBirthplace((String) data.get("birthplace"));
             String biography = (String) data.get("biography");
-            person.setBiography(limit(biography,500));
+            person.setBiography(limit(biography, 500));
             person.setVersion((Integer) data.get("version"));
             person.setProfileImageUrl(selectImageUrl((List<Map>) data.get("profile"), "profile", "profile"));
-            person.setLastModified(toDate(data,"last_modified_at","yyyy-MM-dd HH:mm:ss"));
+            person.setLastModified(toDate(data, "last_modified_at", "yyyy-MM-dd HH:mm:ss"));
         } catch (Exception e) {
             throw new MovieDbException("Failed to map json for person", e);
         }
     }
 
     private String limit(String text, int limit) {
-        if (text==null || text.length() < limit) return text;
-        return text.substring(0,limit);
+        if (text == null || text.length() < limit) {
+            return text;
+        }
+        return text.substring(0, limit);
     }
 
 /*

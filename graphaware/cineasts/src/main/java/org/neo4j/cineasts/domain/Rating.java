@@ -62,15 +62,27 @@ public class Rating {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Rating)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Rating)) {
+            return false;
+        }
 
         Rating rating = (Rating) o;
 
-        if (stars != rating.stars) return false;
-        if (comment != null ? !comment.equals(rating.comment) : rating.comment != null) return false;
-        if (movie != null ? !movie.equals(rating.movie) : rating.movie != null) return false;
-        if (user != null ? !user.equals(rating.user) : rating.user != null) return false;
+        if (stars != rating.stars) {
+            return false;
+        }
+        if (comment != null ? !comment.equals(rating.comment) : rating.comment != null) {
+            return false;
+        }
+        if (movie != null ? !movie.equals(rating.movie) : rating.movie != null) {
+            return false;
+        }
+        if (user != null ? !user.equals(rating.user) : rating.user != null) {
+            return false;
+        }
 
         return true;
     }

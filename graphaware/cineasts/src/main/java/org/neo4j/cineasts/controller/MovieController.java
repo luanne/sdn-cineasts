@@ -1,26 +1,27 @@
 package org.neo4j.cineasts.controller;
 
-import org.neo4j.cineasts.domain.*;
-import org.neo4j.cineasts.repository.MovieRepository;
+import org.neo4j.cineasts.domain.Actor;
+import org.neo4j.cineasts.domain.Movie;
+import org.neo4j.cineasts.domain.Rating;
+import org.neo4j.cineasts.domain.User;
 import org.neo4j.cineasts.repository.ActorRepository;
+import org.neo4j.cineasts.repository.MovieRepository;
 import org.neo4j.cineasts.repository.UserRepository;
 import org.neo4j.cineasts.service.DatabasePopulator;
 import org.neo4j.helpers.collection.IteratorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.neo4j.template.Neo4jOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * @author mh
@@ -29,6 +30,7 @@ import java.util.List;
 @Controller
 public class MovieController {
 
+    private static final Logger log = LoggerFactory.getLogger(MovieController.class);
     @Autowired
     private MovieRepository movieRepository;
     @Autowired
@@ -37,7 +39,6 @@ public class MovieController {
     private UserRepository userRepository;
     @Autowired
     private DatabasePopulator populator;
-    private static final Logger log = LoggerFactory.getLogger(MovieController.class);
 
     /**
      * Only matches 'GET /movies/{id}}' requests for JSON content; a 404 is sent otherwise.
@@ -47,7 +48,7 @@ public class MovieController {
     public
     @ResponseBody
     Movie getMovie(@PathVariable String id) {
-      return IteratorUtil.firstOrNull(movieRepository.findByProperty("id", id));
+        return IteratorUtil.firstOrNull(movieRepository.findByProperty("id", id));
     }
 
 
@@ -61,36 +62,36 @@ public class MovieController {
             final int stars = movie.getStars();
             model.addAttribute("stars", stars);
             Rating rating = null;
-            if(user!=null) {
-                for(Rating r : user.getRatings()) {
-                    if(r.getMovie().equals(movie)) {
-                        rating=r;
+            if (user != null) {
+                for (Rating r : user.getRatings()) {
+                    if (r.getMovie().equals(movie)) {
+                        rating = r;
                         break;
                     }
                 }
             }
-            if(rating == null) {
+            if (rating == null) {
                 rating = new Rating();
                 rating.setMovie(movie);
                 rating.setUser(user);
                 rating.setStars(stars);
             }
-            model.addAttribute("userRating",rating);
+            model.addAttribute("userRating", rating);
         }
         return "/movies/show";
     }
 
     @RequestMapping(value = "/movies/{movieId}", method = RequestMethod.POST, headers = "Accept=text/html")
-    public String updateMovie(Model model, @PathVariable String movieId, @RequestParam(value = "rated",required = false) Integer stars, @RequestParam(value = "comment",required = false) String comment) {
-        Movie movie = IteratorUtil.firstOrNull(movieRepository.findByProperty("id",movieId));
+    public String updateMovie(Model model, @PathVariable String movieId, @RequestParam(value = "rated", required = false) Integer stars, @RequestParam(value = "comment", required = false) String comment) {
+        Movie movie = IteratorUtil.firstOrNull(movieRepository.findByProperty("id", movieId));
         User user = userRepository.getUserFromSession();
         if (user != null && movie != null) {
-            int stars1 = stars==null ? -1 : stars;
-            String comment1 = comment!=null ? comment.trim() : null;
-            user.rate(movie,stars1,comment1);
+            int stars1 = stars == null ? -1 : stars;
+            String comment1 = comment != null ? comment.trim() : null;
+            user.rate(movie, stars1, comment1);
             userRepository.save(user);
         }
-        return singleMovieView(model,movieId);
+        return singleMovieView(model, movieId);
     }
 
     private User addUser(Model model) {
@@ -101,7 +102,7 @@ public class MovieController {
 
     @RequestMapping(value = "/movies", method = RequestMethod.GET, headers = "Accept=text/html")
     public String findMovies(Model model, @RequestParam("q") String query) {
-        if (query!=null && !query.isEmpty()) {
+        if (query != null && !query.isEmpty()) {
             //Page<Movie> movies = movieRepository.findByTitleLike(query, new PageRequest(0, 20));
             Iterable<Movie> movies = movieRepository.findByTitleLike(query);
             model.addAttribute("movies", IteratorUtil.asCollection(movies));
@@ -115,10 +116,10 @@ public class MovieController {
 
     @RequestMapping(value = "/actors/{id}", method = RequestMethod.GET, headers = "Accept=text/html")
     public String singleActorView(Model model, @PathVariable String id) {
-        Actor actor = IteratorUtil.firstOrNull( actorRepository.findByProperty("id",id));
+        Actor actor = IteratorUtil.firstOrNull(actorRepository.findByProperty("id", id));
         model.addAttribute("actor", actor);
         model.addAttribute("id", id);
-        model.addAttribute("roles",  IteratorUtil.asCollection(actor.getRoles()));
+        model.addAttribute("roles", IteratorUtil.asCollection(actor.getRoles()));
         addUser(model);
         return "/actors/show";
     }
@@ -126,8 +127,8 @@ public class MovieController {
     //@RequestMapping(value = "/admin/populate", method = RequestMethod.GET)
     @RequestMapping(value = "/populate", method = RequestMethod.GET)
     public String populateDatabase(Model model) {
-        Collection<Movie> movies=populator.populateDatabase();
-        model.addAttribute("movies",movies);
+        Collection<Movie> movies = populator.populateDatabase();
+        model.addAttribute("movies", movies);
         addUser(model);
         return "/movies/list";
     }

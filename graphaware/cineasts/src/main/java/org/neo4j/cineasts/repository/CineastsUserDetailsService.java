@@ -2,7 +2,6 @@ package org.neo4j.cineasts.repository;
 
 import org.neo4j.cineasts.domain.User;
 import org.neo4j.cineasts.service.CineastsUserDetails;
-import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
@@ -12,7 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
  */
 public interface CineastsUserDetailsService extends UserDetailsService {
     @Override
-    CineastsUserDetails loadUserByUsername(String login) throws UsernameNotFoundException, DataAccessException;
+    CineastsUserDetails loadUserByUsername(String login) throws UsernameNotFoundException;
 
     User getUserFromSession();
 

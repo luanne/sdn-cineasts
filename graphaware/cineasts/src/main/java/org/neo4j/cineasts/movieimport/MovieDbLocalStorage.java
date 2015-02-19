@@ -1,18 +1,16 @@
 package org.neo4j.cineasts.movieimport;
 
 import org.codehaus.jackson.map.ObjectMapper;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
-import java.io.*;
+import java.io.File;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 public class MovieDbLocalStorage {
 
-    private String storagePath;
     protected ObjectMapper mapper;
+    private String storagePath;
 
     public MovieDbLocalStorage(String storagePath) {
         this.storagePath = storagePath;
@@ -47,7 +45,9 @@ public class MovieDbLocalStorage {
             final Object value = mapper.readValue(storageFile, Object.class);
             if (value instanceof List) {
                 List list = (List) value;
-                if (list.isEmpty() || list.get(0).equals("Nothing found.")) return Collections.singletonMap("not_found", System.currentTimeMillis());
+                if (list.isEmpty() || list.get(0).equals("Nothing found.")) {
+                    return Collections.singletonMap("not_found", System.currentTimeMillis());
+                }
                 return asMap(list.get(0));
             }
             return asMap(value);
@@ -61,7 +61,7 @@ public class MovieDbLocalStorage {
             return (Map) value;
         }
         final String typeInformation = value == null ? "null" : value.getClass().getSimpleName();
-        throw new MovieDbException("Wrong movie data format, expected Map/JSON-Object but was "+ typeInformation);
+        throw new MovieDbException("Wrong movie data format, expected Map/JSON-Object but was " + typeInformation);
     }
 
     public void storeMovie(String movieId, Object movieData) {
@@ -71,7 +71,7 @@ public class MovieDbLocalStorage {
 
     private void storeJsonValue(Object jsonData, File storageFile) {
         try {
-            mapper.writeValue(storageFile,jsonData);
+            mapper.writeValue(storageFile, jsonData);
         } catch (Exception e) {
             throw new MovieDbException("Failed to store JSON to storage for file " + storageFile.getPath(), e);
         }

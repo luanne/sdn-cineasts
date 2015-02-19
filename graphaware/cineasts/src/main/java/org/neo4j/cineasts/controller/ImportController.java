@@ -20,8 +20,8 @@ import java.util.Map;
 @Controller
 public class ImportController {
 
-    private MovieDbImportService importService;
     private static final Logger log = LoggerFactory.getLogger(ImportController.class);
+    private MovieDbImportService importService;
 
     @Autowired
     public ImportController(MovieDbImportService importService) {
@@ -30,7 +30,7 @@ public class ImportController {
 
     @RequestMapping(value = "/import/{ids}", method = RequestMethod.GET)
     public String importMovie(@PathVariable String ids, Model model) {
-        long start=System.currentTimeMillis();
+        long start = System.currentTimeMillis();
         final Map<Integer, String> movies = importService.importMovies(extractRanges(ids));
         long duration = (System.currentTimeMillis() - start) / 1000;
         model.addAttribute("duration", duration);

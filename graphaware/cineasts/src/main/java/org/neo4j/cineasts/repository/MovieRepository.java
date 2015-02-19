@@ -1,8 +1,6 @@
 package org.neo4j.cineasts.repository;
 
 import org.neo4j.cineasts.domain.Movie;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.GraphRepository;
 
@@ -11,11 +9,11 @@ import org.springframework.data.neo4j.repository.GraphRepository;
  * @since 02.04.11
  */
 public interface MovieRepository extends GraphRepository<Movie> {
-      /*  NamedIndexRepository<Movie>,
-        RelationshipOperationsRepository<Movie> */
+    /*  NamedIndexRepository<Movie>,
+      RelationshipOperationsRepository<Movie> */
     Movie findById(String id);
 
-   // Page<Movie> findByTitleLike(String title, Pageable page);
+    // Page<Movie> findByTitleLike(String title, Pageable page);
 
     @Query("MATCH (movie:Movie) WHERE movie.title =~ '.*{0}.*' RETURN movie")
     Iterable<Movie> findByTitleLike(String title);

@@ -13,6 +13,10 @@ public class MovieImporter {
 
     private final MovieDbImportService importer;
 
+    public MovieImporter(MovieDbImportService importer) {
+        this.importer = importer;
+    }
+
     public static void main(String[] args) {
         final FileSystemXmlApplicationContext ctx = new FileSystemXmlApplicationContext("src/main/webapp/WEB-INF/applicationContext.xml");
         try {
@@ -24,8 +28,14 @@ public class MovieImporter {
         }
     }
 
-    public MovieImporter(MovieDbImportService importer) {
-        this.importer = importer;
+    private static Map<Integer, Integer> getMovieIdsToImport(String[] args) {
+        if (args.length == 0) {
+            throw new IllegalArgumentException("Usage: MovieImporter 1 10000\nWorking Directory should be the cineasts directory with the json files in data/json.");
+        }
+        if (args.length == 1) {
+            return Collections.singletonMap(Integer.valueOf(args[0]), Integer.valueOf(args[0]));
+        }
+        return Collections.singletonMap(Integer.valueOf(args[0]), Integer.valueOf(args[1]));
     }
 
     private void runImport(Map<Integer, Integer> movieIdsToImport) {
@@ -35,16 +45,6 @@ public class MovieImporter {
         for (Map.Entry<Integer, String> movie : result.entrySet()) {
             System.out.println(movie.getKey() + "\t" + movie.getValue());
         }
-        System.out.println("Imported movies took "+ time+" ms.");
-    }
-
-    private static Map<Integer, Integer> getMovieIdsToImport(String[] args) {
-        if (args.length == 0) {
-            throw new IllegalArgumentException("Usage: MovieImporter 1 10000\nWorking Directory should be the cineasts directory with the json files in data/json.");
-        }
-        if (args.length == 1) {
-            return Collections.singletonMap(Integer.valueOf(args[0]), Integer.valueOf(args[0]));
-        }
-        return Collections.singletonMap(Integer.valueOf(args[0]), Integer.valueOf(args[1]));
+        System.out.println("Imported movies took " + time + " ms.");
     }
 }

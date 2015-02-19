@@ -49,10 +49,10 @@ public class DatabasePopulationTests extends WrappingServerIntegrationTest {
         Actor tomHanks = new Actor("1", "Tom Hanks");
         tomHanks = actorRepository.save(tomHanks);
 
-        Movie forrest = new Movie("1","Forrest Gump");
-        forrest =  movieRepository.save(forrest);
+        Movie forrest = new Movie("1", "Forrest Gump");
+        forrest = movieRepository.save(forrest);
 
-        Director robert = new Director("1","Robert Zemeckis");
+        Director robert = new Director("1", "Robert Zemeckis");
         robert.directed(forrest);
         robert = directorRepository.save(robert);
 

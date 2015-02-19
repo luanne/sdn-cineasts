@@ -105,8 +105,12 @@ public class User {
     }
 
     public void updatePassword(String old, String newPass1, String newPass2) {
-        if (!password.equals(encode(old))) throw new IllegalArgumentException("Existing Password invalid");
-        if (!newPass1.equals(newPass2)) throw new IllegalArgumentException("New Passwords don't match");
+        if (!password.equals(encode(old))) {
+            throw new IllegalArgumentException("Existing Password invalid");
+        }
+        if (!newPass1.equals(newPass2)) {
+            throw new IllegalArgumentException("New Passwords don't match");
+        }
         this.password = encode(newPass1);
     }
 
@@ -116,13 +120,21 @@ public class User {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof User)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof User)) {
+            return false;
+        }
 
         User user = (User) o;
 
-        if (login != null ? !login.equals(user.login) : user.login != null) return false;
-        if (nodeId != null ? !nodeId.equals(user.nodeId) : user.nodeId != null) return false;
+        if (login != null ? !login.equals(user.login) : user.login != null) {
+            return false;
+        }
+        if (nodeId != null ? !nodeId.equals(user.nodeId) : user.nodeId != null) {
+            return false;
+        }
 
         return true;
     }

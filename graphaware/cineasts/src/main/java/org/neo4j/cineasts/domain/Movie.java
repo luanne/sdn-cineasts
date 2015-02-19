@@ -26,13 +26,13 @@ public class Movie {
     String description;
 
     @Relationship(type = "DIRECTED", direction = Relationship.INCOMING)
-    Set<Director> directors;
+    Set<Director> directors = new HashSet<>();
 
 
     Set<Actor> actors;
 
     @Relationship(type = "ACTS_IN", direction = Relationship.INCOMING)
-    Set<Role> roles;
+    Set<Role> roles = new HashSet<>();
 
     @Relationship(type = "RATED", direction = Relationship.INCOMING)
     private Set<Rating> ratings = new HashSet<>();
@@ -67,7 +67,9 @@ public class Movie {
     }
 
     public int getYear() {
-        if (releaseDate == null) return 0;
+        if (releaseDate == null) {
+            return 0;
+        }
         Calendar cal = Calendar.getInstance();
         cal.setTime(releaseDate);
         return cal.get(Calendar.YEAR);
@@ -100,7 +102,9 @@ public class Movie {
     public int getStars() {
         Iterable<Rating> allRatings = ratings;
 
-        if (allRatings == null) return 0;
+        if (allRatings == null) {
+            return 0;
+        }
         int stars = 0, count = 0;
         for (Rating rating : allRatings) {
             stars += rating.getStars();
@@ -219,7 +223,9 @@ public class Movie {
 
     public String getYoutubeId() {
         String trailerUrl = trailer;
-        if (trailerUrl == null || !trailerUrl.contains("youtu")) return null;
+        if (trailerUrl == null || !trailerUrl.contains("youtu")) {
+            return null;
+        }
         String[] parts = trailerUrl.split("[=/]");
         int numberOfParts = parts.length;
         return numberOfParts > 0 ? parts[numberOfParts - 1] : null;
@@ -229,6 +235,10 @@ public class Movie {
         return directors;
     }
 
+    public void addDirector(Director director) {
+        directors.add(director);
+    }
+
     @Override
     public String toString() {
         return String.format("%s (%s) [%s]", title, releaseDate, id);
@@ -236,19 +246,25 @@ public class Movie {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Movie)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Movie)) {
+            return false;
+        }
 
         Movie movie = (Movie) o;
 
-        if (!id.equals(movie.id)) return false;
+        if (id != null ? !id.equals(movie.id) : movie.id != null) {
+            return false;
+        }
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        return id.hashCode();
+        return id != null ? id.hashCode() : 0;
     }
 }
 

@@ -9,9 +9,9 @@ import java.util.Collection;
 import java.util.Collections;
 
 /**
-* @author mh
-* @since 07.03.11
-*/
+ * @author mh
+ * @since 07.03.11
+ */
 public class CineastsUserDetails implements UserDetails {
     private final User user;
 
@@ -22,7 +22,9 @@ public class CineastsUserDetails implements UserDetails {
     @Override
     public Collection<GrantedAuthority> getAuthorities() {
         User.Roles[] roles = user.getRole();
-        if (roles ==null) return Collections.emptyList();
+        if (roles == null) {
+            return Collections.emptyList();
+        }
         return Arrays.<GrantedAuthority>asList(roles);
     }
 

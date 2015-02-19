@@ -1,7 +1,6 @@
 package movieimport;
 
 import context.PersistenceContext;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.neo4j.cineasts.movieimport.MovieDbApiClient;
@@ -26,13 +25,13 @@ public class MovieDbApiClientTests {
     @Test
     public void testGetMovie() throws Exception {
         Map movie = new MovieDbApiClient(API_KEY).getMovie("2");
-        assertEquals(2,movie.get("id"));
+        assertEquals(2, movie.get("id"));
     }
 
     @Test
     public void testGetPerson() throws Exception {
         Map person = new MovieDbApiClient(API_KEY).getPerson("30112");
-        assertEquals(30112,person.get("id"));
+        assertEquals(30112, person.get("id"));
 
     }
 }

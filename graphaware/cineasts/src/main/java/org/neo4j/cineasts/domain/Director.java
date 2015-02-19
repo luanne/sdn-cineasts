@@ -32,7 +32,8 @@ public class Director extends Person {
     }
 
     public void directed(Movie movie) {
-        this.directedMovies.add(movie);
+        directedMovies.add(movie);
+        movie.addDirector(this);
     }
 
 }

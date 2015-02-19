@@ -20,7 +20,7 @@ public class MovieDbLocalStorageTests {
 
 
     private static final String ID = "111";
-    private static final Map<String,String> DATA = Collections.singletonMap("id", ID);
+    private static final Map<String, String> DATA = Collections.singletonMap("id", ID);
     protected MovieDbLocalStorage storage;
 
     @Before
@@ -30,38 +30,40 @@ public class MovieDbLocalStorageTests {
 
     @Test
     public void testHasMovie() throws Exception {
-        storage.storeMovie(ID,DATA);
+        storage.storeMovie(ID, DATA);
         assertEquals(true, storage.hasMovie(ID));
     }
 
     @Test
     public void testLoadMovie() throws Exception {
-        storage.storeMovie(ID,DATA);
-        assertEquals(DATA,storage.loadMovie(ID));
+        storage.storeMovie(ID, DATA);
+        assertEquals(DATA, storage.loadMovie(ID));
     }
 
     @Test
     public void testStoreMovie() throws Exception {
-        storage.storeMovie(ID,DATA);
-        assertEquals(true, new File("target/data/movie_"+ID+".json").exists());
+        storage.storeMovie(ID, DATA);
+        assertEquals(true, new File("target/data/movie_" + ID + ".json").exists());
     }
 
     @Test
     public void testHasPerson() throws Exception {
-        storage.storePerson(ID,DATA);
+        storage.storePerson(ID, DATA);
         assertEquals(true, storage.hasPerson(ID));
     }
 
     @Test
     public void testLoadPerson() throws Exception {
-        storage.storePerson(ID,DATA);
-        assertEquals(DATA,storage.loadPerson(ID));
+        storage.storePerson(ID, DATA);
+        assertEquals(DATA, storage.loadPerson(ID));
     }
+
     @Test
     public void testLoadPersonFromList() throws Exception {
-        storage.storePerson(ID,asList(DATA));
-        assertEquals(DATA,storage.loadPerson(ID));
+        storage.storePerson(ID, asList(DATA));
+        assertEquals(DATA, storage.loadPerson(ID));
     }
+
     @Test
     public void testLoadPersonFromInvalidList() throws Exception {
         storage.storePerson(ID, asList("Nothing found."));
@@ -71,7 +73,7 @@ public class MovieDbLocalStorageTests {
 
     @Test
     public void testStorePerson() throws Exception {
-        storage.storePerson(ID,DATA);
-        assertEquals(true, new File("target/data/person_"+ID+".json").exists());
+        storage.storePerson(ID, DATA);
+        assertEquals(true, new File("target/data/person_" + ID + ".json").exists());
     }
 }
