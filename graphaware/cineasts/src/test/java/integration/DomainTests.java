@@ -212,6 +212,30 @@ public class DomainTests extends WrappingServerIntegrationTest {
 
         Movie foundMatrix = movieRepository.findByProperty("id", "3").iterator().next();
         assertEquals(2, foundMatrix.getDirectors().size());
+    }
+
+    @Test
+    public void shouldBeAbleToSaveMovieWithManyActors() {
+        Movie matrix = new Movie("3", "The Matrix");
+        matrix = movieRepository.save(matrix);
+
+        Actor keanu = new Actor("6384","Keanu Reeves");
+        keanu.playedIn(matrix,"Neo");
+        actorRepository.save(keanu);
+
+        Actor laurence = new Actor("2975","Laurence Fishburne");
+        laurence.playedIn(matrix, "Morpheus");
+        actorRepository.save(laurence);
+
+        Actor carrie = new Actor("530","Carrie-Ann Moss");
+        carrie.playedIn(matrix, "Trinity");
+        actorRepository.save(carrie);
+
+        Actor foundKeanu = actorRepository.findByProperty("id","6384").iterator().next();
+        assertEquals(1,foundKeanu.getRoles().size());  //TODO why???
+
+        Movie foundMatrix = movieRepository.findByProperty("id", "3").iterator().next();
+        assertEquals(3, foundMatrix.getRoles().size());  //TODO why again?
 
     }
 }

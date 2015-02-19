@@ -239,6 +239,10 @@ public class Movie {
         directors.add(director);
     }
 
+    public void addRole(Role role) {
+        roles.add(role);
+    }
+
     @Override
     public String toString() {
         return String.format("%s (%s) [%s]", title, releaseDate, id);

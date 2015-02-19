@@ -5,6 +5,7 @@ import org.neo4j.ogm.annotation.Relationship;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author mh
@@ -13,7 +14,7 @@ import java.util.HashSet;
 public class Actor extends Person {
 
     @Relationship(type = "ACTS_IN", direction = Relationship.OUTGOING)
-    Collection<Role> roles = new HashSet<Role>();
+    Set<Role> roles = new HashSet<Role>();
 
     public Actor() {
     }
@@ -26,13 +27,14 @@ public class Actor extends Person {
         super(id, null);
     }
 
-    public Iterable<Role> getRoles() {
+    public Set<Role> getRoles() {
         return roles;
     }
 
     public Role playedIn(Movie movie, String roleName) {
         final Role role = new Role(this, movie, roleName);
         roles.add(role);
+        movie.addRole(role);
         return role;
     }
 
