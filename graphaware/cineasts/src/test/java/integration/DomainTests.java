@@ -172,6 +172,14 @@ public class DomainTests extends WrappingServerIntegrationTest {
         assertEquals(1, loaded.getFriends().size());
     }
 
+    @Test
+    public void shouldBeAbleToSaveUserWithSecurityRoles() {
+        User micha = new User("micha", "Micha", "password", User.Roles.ROLE_ADMIN, User.Roles.ROLE_USER);
+        userRepository.save(micha);
+
+        User foundMicha = userRepository.findByProperty("login","micha").iterator().next();
+        assertEquals(micha.getName(),foundMicha.getName());
+    }
 
     public void ratingForAMovieByAUserCanBeRetrieved() {
         Movie forrest = new Movie("1", "Forrest Gump");

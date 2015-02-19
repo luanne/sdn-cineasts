@@ -1,9 +1,11 @@
 package org.neo4j.cineasts.domain;
 
 
+import org.neo4j.cineasts.converter.UserRolesConverter;
 import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
+import org.neo4j.ogm.annotation.typeconversion.Convert;
 import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -23,6 +25,7 @@ public class User {
     String info;
     @Relationship(type = FRIEND, direction = Relationship.UNDIRECTED)
     Set<User> friends = new HashSet<>(); //Was fetch
+    @Convert(UserRolesConverter.class)
     private Roles[] roles;
     @Relationship(type = "RATED")
     private Set<Rating> ratings = new HashSet<>();
