@@ -61,8 +61,7 @@ public class UserRepositoryImpl implements CineastsUserDetailsService {
         if (password == null || password.isEmpty()) {
             throw new RuntimeException("No password provided.");
         }
-        //User user=userRepository.save(new User(login,name,password,User.Roles.ROLE_USER)); //TODO
-        User user = userRepository.save(new User(login, name, password));
+        User user=userRepository.save(new User(login,name,password,User.Roles.ROLE_USER));
         setUserInSession(user);
         return user;
     }
