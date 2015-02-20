@@ -36,11 +36,11 @@
             <artifactId>spring-security-web</artifactId>
             <version>4.0.0.RC1</version>
         </dependency>
-        <!-- <dependency>
+         <dependency>
              <groupId>org.springframework.security</groupId>
              <artifactId>spring-security-config</artifactId>
-             <version>3.2.5.RELEASE</version>
-         </dependency>-->
+             <version>4.0.0.RC1</version>
+         </dependency>
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-neo4j</artifactId>
@@ -124,6 +124,17 @@
                     <source>1.7</source>
                     <target>1.7</target>
                     <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.mortbay.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>7.6.5.v20120716</version>
+                <configuration>
+                    <scanIntervalSeconds>10</scanIntervalSeconds>
+                    <stopKey>foo</stopKey>
+                    <stopPort>9999</stopPort>
+                    <jvmArgs></jvmArgs>
                 </configuration>
             </plugin>
         </plugins>
