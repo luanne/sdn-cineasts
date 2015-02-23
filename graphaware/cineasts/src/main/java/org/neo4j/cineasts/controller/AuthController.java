@@ -5,6 +5,7 @@ import org.neo4j.cineasts.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +23,8 @@ public class AuthController {
 
     @Autowired
     UserRepository userRepository;
+
+    @Secured("IS_AUTHENTICATED_ANONYMOUSLY")
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login(@RequestParam(value = "login_error", required = false) boolean error, Model model) {
         logger.debug("Received request to show login page, error "+error);

@@ -1,6 +1,7 @@
 package integration;
 
 import context.PersistenceContext;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.neo4j.cineasts.domain.Actor;
@@ -11,8 +12,8 @@ import org.neo4j.cineasts.domain.User;
 import org.neo4j.cineasts.repository.ActorRepository;
 import org.neo4j.cineasts.repository.DirectorRepository;
 import org.neo4j.cineasts.repository.MovieRepository;
+import org.neo4j.cineasts.repository.PersonRepository;
 import org.neo4j.cineasts.repository.UserRepository;
-import org.neo4j.ogm.testutil.WrappingServerIntegrationTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
@@ -24,7 +25,7 @@ import static org.junit.Assert.assertNotNull;
 @ContextConfiguration(classes = {PersistenceContext.class})
 @RunWith(SpringJUnit4ClassRunner.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class DomainTests extends WrappingServerIntegrationTest {
+public class DomainTests{
 
     @Autowired
     ActorRepository actorRepository;
@@ -34,8 +35,10 @@ public class DomainTests extends WrappingServerIntegrationTest {
     MovieRepository movieRepository;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    PersonRepository personRepository;
 
-    @Override
+
     protected int neoServerPort() {
         return PersistenceContext.NEO4J_PORT;
     }
@@ -219,27 +222,61 @@ public class DomainTests extends WrappingServerIntegrationTest {
         Movie matrix = new Movie("3", "The Matrix");
         matrix = movieRepository.save(matrix);
 
+        //TODO save the actor after his role, don't save the movie, no roles saved on the movie
         Actor keanu = new Actor("6384","Keanu Reeves");
         actorRepository.save(keanu);
         keanu.playedIn(matrix,"Neo");
-       // actorRepository.save(keanu);
         matrix = movieRepository.save(matrix);
+
         Actor laurence = new Actor("2975","Laurence Fishburne");
         actorRepository.save(laurence);
         laurence.playedIn(matrix, "Morpheus");
-//        actorRepository.save(laurence);
         matrix = movieRepository.save(matrix);
+
         Actor carrie = new Actor("530", "Carrie-Ann Moss");
         actorRepository.save(carrie);
         carrie.playedIn(matrix, "Trinity");
-       // actorRepository.save(carrie);
         matrix = movieRepository.save(matrix);
 
-        Actor foundKeanu = actorRepository.findByProperty("id","2975").iterator().next();
-        assertEquals(1,foundKeanu.getRoles().size());  //TODO why???
+        Actor foundKeanu = actorRepository.findByProperty("id","6384").iterator().next();
+        assertEquals(1,foundKeanu.getRoles().size());
 
         Movie foundMatrix = movieRepository.findByProperty("id", "3").iterator().next();
-        assertEquals(3, foundMatrix.getRoles().size());  //TODO why again?
+        assertEquals(3, foundMatrix.getRoles().size());
 
     }
+
+    @Test
+    @Ignore
+    public void personShouldBeAbleToBothActInAndDirectMovies() {   //TODO M>1
+       /* Movie unforgiven = new Movie("4","Unforgiven");
+        unforgiven = movieRepository.save(unforgiven);
+
+        Actor clint = new Actor("5","Clint Eastwood");
+        clint = actorRepository.save(clint);
+        clint.playedIn(unforgiven,"Bill Munny");
+        unforgiven=movieRepository.save(unforgiven);
+
+        Person clintPerson = personRepository.findByProperty("id","5").iterator().next();
+        Director clintDirector = new Director(clintPerson);
+        clintDirector = directorRepository.save(clintDirector);
+        unforgiven.addDirector(clintDirector);
+        movieRepository.save(unforgiven);
+
+        Movie foundUnforgiven = movieRepository.findByProperty("id","4").iterator().next();
+        assertEquals(1,foundUnforgiven.getDirectors().size());
+        assertEquals(1,foundUnforgiven.getRoles().size());
+        assertEquals("5",foundUnforgiven.getDirectors().iterator().next().getId());
+        assertEquals("5",foundUnforgiven.getRoles().iterator().next().getActor().getId());
+
+        Person p = personRepository.findByProperty("id","5").iterator().next();
+        assertNotNull(p);
+        Actor actor =  actorRepository.findByProperty("id","5").iterator().next();
+        assertNotNull(actor);
+        Director d = directorRepository.findByProperty("id","5").iterator().next();
+        assertNotNull(d);*/
+
+    }
+
+
 }

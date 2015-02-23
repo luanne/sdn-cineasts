@@ -24,12 +24,12 @@ public class Person {
     private Date lastModified;
     private String profileImageUrl;
 
-    protected Person(String id, String name) {
+    public Person(String id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    protected Person() {
+    public Person() {
     }
 
     public String getId() {

@@ -37,9 +37,9 @@ public class MovieDbImportServiceTests extends WrappingServerIntegrationTest {
 
     @Test
     public void testImportMovie() throws Exception {
-        Movie movie = importService.importMovie("603");
-        assertEquals("movie-id", "603", movie.getId());    //TODO movie 2 has UTF issues
-        assertEquals("movie-title", "The Matrix", movie.getTitle());
+        Movie movie = importService.importMovie("2");
+        assertEquals("movie-id", "2", movie.getId());
+        assertEquals("movie-title", "Ariel", movie.getTitle());
     }
 
     @Test
@@ -60,9 +60,7 @@ public class MovieDbImportServiceTests extends WrappingServerIntegrationTest {
     @Test
     public void shouldImportMovieWithTwoDirectors() throws Exception {
         Movie movie = importService.importMovie("603");
-
         movie = movieRepository.findByProperty("id", "603").iterator().next();
-
         assertEquals(2, movie.getDirectors().size());
     }
 }

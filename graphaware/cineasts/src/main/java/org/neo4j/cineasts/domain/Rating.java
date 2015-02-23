@@ -6,7 +6,7 @@ import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.RelationshipEntity;
 import org.neo4j.ogm.annotation.StartNode;
 
-@RelationshipEntity  //TODO is type supported/required here?
+@RelationshipEntity
 public class Rating {
 
     @GraphId
