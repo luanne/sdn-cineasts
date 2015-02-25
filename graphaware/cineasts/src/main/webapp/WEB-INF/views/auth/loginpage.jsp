@@ -29,6 +29,8 @@ pageEncoding="UTF-8"%>
       <p>
         <input type="checkbox" name="_spring_security_remember_me"/> Remember me
       </p>
+        <input type="hidden" name="${_csrf.parameterName}"
+      			value="${_csrf.token}" />
       <input  type="submit" value="Login"/>
     </form><br/>
     <a href="/auth/registerpage">Register</a>

@@ -124,8 +124,8 @@ public class MovieController {
         return "/actors/show";
     }
 
-    //@RequestMapping(value = "/admin/populate", method = RequestMethod.GET)
-    @RequestMapping(value = "/populate", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin/populate", method = RequestMethod.GET)
+ //   @RequestMapping(value = "/populate", method = RequestMethod.GET)
     public String populateDatabase(Model model) {
         Collection<Movie> movies = populator.populateDatabase();
         model.addAttribute("movies", movies);

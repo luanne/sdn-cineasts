@@ -29,6 +29,8 @@ pageEncoding="UTF-8"%>
         <label for="j_password">Password:</label>
         <input id="j_password" name="j_password" type="password" />
       </p>
+       <input type="hidden" name="${_csrf.parameterName}"
+            			value="${_csrf.token}" />
       <input  type="submit" value="Register"/>
     </form>
     <br/>

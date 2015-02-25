@@ -14,6 +14,7 @@ import org.neo4j.cineasts.repository.DirectorRepository;
 import org.neo4j.cineasts.repository.MovieRepository;
 import org.neo4j.cineasts.repository.PersonRepository;
 import org.neo4j.cineasts.repository.UserRepository;
+import org.neo4j.ogm.testutil.WrappingServerIntegrationTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
@@ -25,7 +26,7 @@ import static org.junit.Assert.assertNotNull;
 @ContextConfiguration(classes = {PersistenceContext.class})
 @RunWith(SpringJUnit4ClassRunner.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class DomainTests{
+public class DomainTests extends WrappingServerIntegrationTest{
 
     @Autowired
     ActorRepository actorRepository;
@@ -39,6 +40,7 @@ public class DomainTests{
     PersonRepository personRepository;
 
 
+    @Override
     protected int neoServerPort() {
         return PersistenceContext.NEO4J_PORT;
     }
