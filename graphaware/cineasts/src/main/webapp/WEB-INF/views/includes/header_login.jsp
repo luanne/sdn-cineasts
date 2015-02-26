@@ -18,7 +18,7 @@
         </c:when>
         <c:otherwise>
             <a href="<c:url value="/user" />">${user.name}</a>
-            <a href="<c:url value="/auth/logout" />">Logout</a>
+            <a href="<c:url value="j_spring_security_logout" />">Logout</a>
         </c:otherwise>
     </c:choose>
 </div>

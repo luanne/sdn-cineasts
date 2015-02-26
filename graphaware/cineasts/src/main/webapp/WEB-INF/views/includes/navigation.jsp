@@ -9,7 +9,11 @@
         </c:when>
         <c:otherwise>
             <a href="<c:url value="/user" />">${user.name}</a>
-            <a href="<c:url value="/auth/logout" />">Logout</a>
+            <a href="#" onclick="document.logout.submit();return false;">Logout</a>
+            <form name="logout" action="j_spring_security_logout" method="post">
+              <input type="submit" value="Log out" />
+              <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+            </form>
         </c:otherwise>
     </c:choose>
 </div>

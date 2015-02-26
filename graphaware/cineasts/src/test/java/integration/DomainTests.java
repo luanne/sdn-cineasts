@@ -20,6 +20,8 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -278,6 +280,15 @@ public class DomainTests extends WrappingServerIntegrationTest{
         Director d = directorRepository.findByProperty("id","5").iterator().next();
         assertNotNull(d);*/
 
+    }
+
+    @Test
+    public void shouldBeAbleToGetEmptyRecommendationsForNewUser() {
+        User micha = new User("micha", "Micha", "password", User.Roles.ROLE_ADMIN, User.Roles.ROLE_USER);
+        userRepository.save(micha);
+
+        List<Movie> recs = movieRepository.getRecommendations("micha");
+        assertEquals(0,recs.size());
     }
 
 

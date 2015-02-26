@@ -31,7 +31,7 @@ public class UserController {
         final User user = userRepository.getUserFromSession();
         model.addAttribute("user", user);
         if (user!=null) {
-            model.addAttribute("recommendations", movieRepository.getRecommendations(user));
+            model.addAttribute("recommendations", movieRepository.getRecommendations(user.getLogin()));
         }
         return "/user/index";
     }

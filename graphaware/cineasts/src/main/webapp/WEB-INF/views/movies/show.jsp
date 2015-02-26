@@ -143,6 +143,8 @@
                     <input type="hidden" value="${userRating.stars}" name="rated" id="rated"/>
                     <input type="text" size="100" name="comment" value="${userRating.comment}"/>
                     <input type="submit" value="Rate!"/>
+                     <input type="hidden" name="${_csrf.parameterName}"
+                          			value="${_csrf.token}" />
                     </h4>
                 </form>
                 <script type="text/javascript">
