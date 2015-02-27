@@ -6,7 +6,7 @@ import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.RelationshipEntity;
 import org.neo4j.ogm.annotation.StartNode;
 
-@RelationshipEntity
+@RelationshipEntity(type="RATED")
 public class Rating {
 
     @GraphId
