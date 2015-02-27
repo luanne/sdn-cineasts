@@ -36,9 +36,15 @@ public class MovieDbImportService {
 
     private MovieDbApiClient client = new MovieDbApiClient("70c7465a780b1d65c0f3d5bd394c5b80");
 
+    private String baseImageUrl;
 
     private MovieDbLocalStorage localStorage = new MovieDbLocalStorage("data/json");
 
+    public void importImageConfig() {
+        Map data = client.getImageConfig();
+        baseImageUrl = ((Map)data.get("images")).get("base_url") + "w185";
+
+    }
     // @Transactional
     public Map<Integer, String> importMovies(Map<Integer, Integer> ranges) {
         final Map<Integer, String> movies = new LinkedHashMap<Integer, String>();
@@ -77,7 +83,7 @@ public class MovieDbImportService {
         if (data.containsKey("not_found")) {
             throw new RuntimeException("Data for Movie " + movieId + " not found.");
         }
-        movieDbJsonMapper.mapToMovie(data, movie);
+        movieDbJsonMapper.mapToMovie(data, movie, baseImageUrl);
         movieRepository.save(movie);
         relatePersonsToMovie(movie, (Map) data.get("credits"));
         return movie;

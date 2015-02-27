@@ -14,7 +14,7 @@ import java.util.Map;
 @Component
 public class MovieDbJsonMapper {
 
-    public void mapToMovie(Map data, Movie movie) {
+    public void mapToMovie(Map data, Movie movie, String baseImageUrl) {
         try {
             movie.setTitle((String) data.get("title"));
             movie.setLanguage((String) data.get("original_language"));
@@ -29,7 +29,7 @@ public class MovieDbJsonMapper {
             movie.setStudio(extractFirst(data, "production_companies", "name"));
             movie.setVersion((Integer) data.get("version"));    //TODO missing
             movie.setLastModified(toDate(data, "last_modified_at", "yyyy-MM-dd HH:mm:ss")); //TODO missing
-            movie.setImageUrl((String) data.get("poster_path"));
+            movie.setImageUrl(baseImageUrl + data.get("poster_path"));
         } catch (Exception e) {
             throw new MovieDbException("Failed to map json for movie", e);
         }

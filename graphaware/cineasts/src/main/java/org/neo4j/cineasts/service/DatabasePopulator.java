@@ -32,6 +32,7 @@ public class DatabasePopulator {
 
     // @Transactional
     public List<Movie> populateDatabase() {
+        importService.importImageConfig();
         // User me = userRepository.save(new User("micha", "Micha", "password", User.Roles.ROLE_ADMIN,User.Roles.ROLE_USER));
         User me = userRepository.save(new User("micha", "Micha", "password"));
         // User ollie = new User("ollie", "Olliver", "password",User.Roles.ROLE_USER);

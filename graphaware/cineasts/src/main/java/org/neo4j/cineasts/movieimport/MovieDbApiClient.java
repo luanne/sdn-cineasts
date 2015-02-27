@@ -18,10 +18,10 @@ public class MovieDbApiClient {
     }
 
     public Map getMovie(String id) {
-        return loadJsonData(id, buildMovieUrl(id));
+        return loadJsonData(buildMovieUrl(id));
     }
 
-    private Map loadJsonData(String id, String url) {
+    private Map loadJsonData(String url) {
         try {
             Map value = mapper.readValue(new URL(url), Map.class);
             if (value.isEmpty()) {
@@ -38,10 +38,15 @@ public class MovieDbApiClient {
     }
 
     public Map getPerson(String id) {
-        return loadJsonData(id, buildPersonUrl(id));
+        return loadJsonData(buildPersonUrl(id));
     }
 
     private String buildPersonUrl(String personId) {
         return String.format("%s/person/%s?api_key=%s", baseUrl, personId, apiKey);
+    }
+
+    public Map getImageConfig() {
+        String url = String.format("%s/configuration?api_key=%s",baseUrl,apiKey);
+        return loadJsonData(url);
     }
 }
