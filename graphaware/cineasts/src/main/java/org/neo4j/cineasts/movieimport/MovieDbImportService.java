@@ -148,6 +148,34 @@ public class MovieDbImportService {
         return personRepository.save(newPerson);
     }
 
+    /*private Actor doImportActor(String personId, Actor newPerson) {
+        logger.debug("Importing actor " + personId);
+        Actor actor = IteratorUtil.singleOrNull(actorRepository.findByProperty("id", personId));
+        if (actor != null) {
+            return actor;
+        }
+        Map data = loadPersonData(personId);
+        if (data.containsKey("not_found")) {
+            throw new RuntimeException("Data for Person " + personId + " not found.");
+        }
+        movieDbJsonMapper.mapToPerson(data, newPerson);
+        return actorRepository.save(newPerson);
+    }
+
+    private Director doImportDirector(String personId, Director newPerson) {
+        logger.debug("Importing director " + personId);
+        Director director = IteratorUtil.singleOrNull(directorRepository.findByProperty("id", personId));
+        if (director != null) {
+            return director;
+        }
+        Map data = loadPersonData(personId);
+        if (data.containsKey("not_found")) {
+            throw new RuntimeException("Data for Person " + personId + " not found.");
+        }
+        movieDbJsonMapper.mapToPerson(data, newPerson);
+        return directorRepository.save(newPerson);
+    }
+*/
     private Map loadPersonData(String personId) {
         if (localStorage.hasPerson(personId)) {
             return localStorage.loadPerson(personId);

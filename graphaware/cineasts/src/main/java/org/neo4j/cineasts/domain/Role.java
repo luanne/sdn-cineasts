@@ -10,7 +10,7 @@ import org.neo4j.ogm.annotation.StartNode;
  * @author mh
  * @since 04.03.11
  */
-@RelationshipEntity
+@RelationshipEntity(type="ACTS_IN")
 public class Role {
 
     @GraphId

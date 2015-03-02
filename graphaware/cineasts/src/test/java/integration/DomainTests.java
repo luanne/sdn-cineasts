@@ -12,7 +12,6 @@ import org.neo4j.cineasts.domain.User;
 import org.neo4j.cineasts.repository.ActorRepository;
 import org.neo4j.cineasts.repository.DirectorRepository;
 import org.neo4j.cineasts.repository.MovieRepository;
-import org.neo4j.cineasts.repository.PersonRepository;
 import org.neo4j.cineasts.repository.UserRepository;
 import org.neo4j.ogm.testutil.WrappingServerIntegrationTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,9 +37,6 @@ public class DomainTests extends WrappingServerIntegrationTest{
     MovieRepository movieRepository;
     @Autowired
     UserRepository userRepository;
-    @Autowired
-    PersonRepository personRepository;
-
 
     @Override
     protected int neoServerPort() {
@@ -290,6 +286,45 @@ public class DomainTests extends WrappingServerIntegrationTest{
         List<Movie> recs = movieRepository.getRecommendations("micha");
         assertEquals(0,recs.size());
     }
+
+    @Test
+    public void twoUsersCanRateSameMovie() {
+        Movie forrest = new Movie("1", "Forrest Gump");
+
+        User micha = new User("micha", "Micha", "password");
+        micha = userRepository.save(micha);
+
+        User luanne = new User("luanne","Luanne","password");
+        luanne = userRepository.save(luanne);
+
+        Rating awesome = micha.rate(forrest, 5, "Awesome");
+        micha = userRepository.save(micha);
+
+
+        User foundMicha = userRepository.findByProperty("login", "micha").iterator().next();
+        assertEquals(1, foundMicha.getRatings().size());
+
+        Movie foundForrest = movieRepository.findByProperty("title", forrest.getTitle()).iterator().next();
+        assertEquals(1, foundForrest.getRatings().size());
+
+        Rating okay = luanne.rate(forrest,3,"Okay");
+        luanne = userRepository.save(luanne);
+
+        User foundLuanne = userRepository.findByProperty("login", "luanne").iterator().next();
+        assertEquals(1, foundLuanne.getRatings().size());
+        foundMicha = userRepository.findByProperty("login", "micha").iterator().next();
+        assertEquals(1, foundMicha.getRatings().size());
+
+        foundForrest = movieRepository.findByProperty("title", forrest.getTitle()).iterator().next();
+        assertEquals(2, foundForrest.getRatings().size());
+
+      /*  Rating rating = foundForrest.getRatings().iterator().next();
+        assertEquals(awesome, rating);
+        assertEquals("Awesome", rating.getComment());
+        assertEquals(5, rating.getStars());
+        assertEquals(5, foundForrest.getStars(), 0);*/
+    }
+
 
 
 }

@@ -28,9 +28,6 @@ public class Movie {
     @Relationship(type = "DIRECTED", direction = Relationship.INCOMING)
     Set<Person> directors = new HashSet<>();
 
-
-    Set<Actor> actors;
-
     @Relationship(type = "ACTS_IN", direction = Relationship.INCOMING)
     Set<Role> roles = new HashSet<>();
 
@@ -58,10 +55,10 @@ public class Movie {
         this.title = title;
     }
 
-    public Collection<Actor> getActors() {
+   /* public Collection<Actor> getActors() {
         return actors;
     }
-
+*/
     public Collection<Role> getRoles() {
         return roles;
     }
