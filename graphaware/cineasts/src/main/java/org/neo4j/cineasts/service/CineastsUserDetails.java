@@ -21,7 +21,7 @@ public class CineastsUserDetails implements UserDetails {
 
     @Override
     public Collection<GrantedAuthority> getAuthorities() {
-        User.Roles[] roles = user.getRole();
+        User.SecurityRole[] roles = user.getRole();
         if (roles == null) {
             return Collections.emptyList();
         }

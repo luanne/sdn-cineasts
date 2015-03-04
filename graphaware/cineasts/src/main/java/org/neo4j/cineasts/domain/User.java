@@ -19,14 +19,17 @@ public class User {
     private static final String SALT = "cewuiqwzie";
     @GraphId
     Long nodeId;
-    String login;  //TODO was indexed
+    String login;
     String name;
     String password;
     String info;
+
     @Relationship(type = FRIEND, direction = Relationship.UNDIRECTED)
-    Set<User> friends = new HashSet<>(); //Was fetch
+    Set<User> friends = new HashSet<>();
+
     @Convert(UserRolesConverter.class)
-    private Roles[] roles;
+    private SecurityRole[] roles;
+
     @Relationship(type = "RATED")
     private Set<Rating> ratings = new HashSet<>();
 
@@ -39,7 +42,7 @@ public class User {
         this.password = password;
     }
 
-    public User(String login, String name, String password, Roles... roles) {
+    public User(String login, String name, String password, SecurityRole... roles) {
         this.login = login;
         this.name = name;
         this.password = encode(password);
@@ -87,7 +90,7 @@ public class User {
         return friends;
     }
 
-    public Roles[] getRole() {
+    public SecurityRole[] getRole() {
         return roles;
     }
 
@@ -149,7 +152,7 @@ public class User {
         return result;
     }
 
-    public enum Roles implements GrantedAuthority {
+    public enum SecurityRole implements GrantedAuthority {
         ROLE_USER, ROLE_ADMIN;
 
         @Override

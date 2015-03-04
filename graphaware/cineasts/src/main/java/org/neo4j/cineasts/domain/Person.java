@@ -15,8 +15,8 @@ public class Person {
 
     @GraphId
     Long nodeId;
-    String id; //TODO validation on id
-    String name;   //TODO name was indexed, fulltext, indexName = people
+    String id;
+    String name;
     private Date birthday;
     private String birthplace;
     private String biography;

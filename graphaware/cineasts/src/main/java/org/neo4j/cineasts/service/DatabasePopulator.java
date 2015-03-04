@@ -33,10 +33,8 @@ public class DatabasePopulator {
     // @Transactional
     public List<Movie> populateDatabase() {
         importService.importImageConfig();
-        // User me = userRepository.save(new User("micha", "Micha", "password", User.Roles.ROLE_ADMIN,User.Roles.ROLE_USER));
-        User me = userRepository.save(new User("micha", "Micha", "password"));
-        // User ollie = new User("ollie", "Olliver", "password",User.Roles.ROLE_USER);
-        User ollie = new User("ollie", "Olliver", "password");
+        User me = userRepository.save(new User("micha", "Micha", "password", User.SecurityRole.ROLE_ADMIN, User.SecurityRole.ROLE_USER));
+        User ollie = new User("ollie", "Olliver", "password", User.SecurityRole.ROLE_USER);
         me.addFriend(ollie);
         userRepository.save(me);
         List<Integer> ids = asList(600, 601, 602, 603, 2);
@@ -45,9 +43,9 @@ public class DatabasePopulator {
             result.add(importService.importMovie(String.valueOf(id)));
         }
 
-        me.rate(movieRepository.findById("13"),5,"Inspiring");
+        me.rate(movieRepository.findById("13"), 5, "Inspiring");
         final Movie movie = movieRepository.findById("603");
-        me.rate(movie,5,"Best of the series");
+        me.rate(movie, 5, "Best of the series");
         return result;
     }
 

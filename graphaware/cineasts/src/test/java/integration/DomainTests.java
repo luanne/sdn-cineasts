@@ -13,6 +13,8 @@ import org.neo4j.cineasts.repository.ActorRepository;
 import org.neo4j.cineasts.repository.DirectorRepository;
 import org.neo4j.cineasts.repository.MovieRepository;
 import org.neo4j.cineasts.repository.UserRepository;
+import org.neo4j.cypher.javacompat.ExecutionEngine;
+import org.neo4j.helpers.collection.IteratorUtil;
 import org.neo4j.ogm.testutil.WrappingServerIntegrationTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
@@ -138,6 +140,8 @@ public class DomainTests extends WrappingServerIntegrationTest{
     }
 
 
+    @Test
+    @Ignore
     public void movieCanBeRatedByUser() {
         Movie forrest = new Movie("1", "Forrest Gump");
 
@@ -177,13 +181,15 @@ public class DomainTests extends WrappingServerIntegrationTest{
 
     @Test
     public void shouldBeAbleToSaveUserWithSecurityRoles() {
-        User micha = new User("micha", "Micha", "password", User.Roles.ROLE_ADMIN, User.Roles.ROLE_USER);
+        User micha = new User("micha", "Micha", "password", User.SecurityRole.ROLE_ADMIN, User.SecurityRole.ROLE_USER);
         userRepository.save(micha);
 
         User foundMicha = userRepository.findByProperty("login","micha").iterator().next();
         assertEquals(micha.getName(),foundMicha.getName());
     }
 
+    @Test
+    @Ignore
     public void ratingForAMovieByAUserCanBeRetrieved() {
         Movie forrest = new Movie("1", "Forrest Gump");
 
@@ -280,7 +286,7 @@ public class DomainTests extends WrappingServerIntegrationTest{
 
     @Test
     public void shouldBeAbleToGetEmptyRecommendationsForNewUser() {
-        User micha = new User("micha", "Micha", "password", User.Roles.ROLE_ADMIN, User.Roles.ROLE_USER);
+        User micha = new User("micha", "Micha", "password", User.SecurityRole.ROLE_ADMIN, User.SecurityRole.ROLE_USER);
         userRepository.save(micha);
 
         List<Movie> recs = movieRepository.getRecommendations("micha");
@@ -288,6 +294,7 @@ public class DomainTests extends WrappingServerIntegrationTest{
     }
 
     @Test
+    @Ignore
     public void twoUsersCanRateSameMovie() {
         Movie forrest = new Movie("1", "Forrest Gump");
 
@@ -325,6 +332,18 @@ public class DomainTests extends WrappingServerIntegrationTest{
         assertEquals(5, foundForrest.getStars(), 0);*/
     }
 
+    @Test
+    @Ignore
+    public void shouldLoadActorsForAPersistedMovie() {
+        new ExecutionEngine(getDatabase()).execute(
+                "CREATE " +
+                        "(dh:Movie {id:'600', title:'Die Hard'}), " +
+                        "(bw:Person:Actor {name: 'Bruce Willis'}), " +
+                        "(bw)-[:ACTS_IN {name:'Bruce'}]->(dh)");
 
+        Movie dieHard = IteratorUtil.firstOrNull(movieRepository.findByProperty("title","Die Hard"));
+        assertNotNull(dieHard);
+        assertEquals(1,dieHard.getRoles().size());
+    }
 
 }

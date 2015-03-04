@@ -40,10 +40,7 @@ public class MovieController {
     @Autowired
     private DatabasePopulator populator;
 
-    /**
-     * Only matches 'GET /movies/{id}}' requests for JSON content; a 404 is sent otherwise.
-     * TODO send a 406 if an unsupported representation, such as XML, is requested.  See SPR-7353.
-     */
+
     @RequestMapping(value = "/movies/{id}", method = RequestMethod.GET, headers = "Accept=application/json")
     public
     @ResponseBody
@@ -125,7 +122,6 @@ public class MovieController {
     }
 
     @RequestMapping(value = "/admin/populate", method = RequestMethod.GET)
- //   @RequestMapping(value = "/populate", method = RequestMethod.GET)
     public String populateDatabase(Model model) {
         Collection<Movie> movies = populator.populateDatabase();
         model.addAttribute("movies", movies);

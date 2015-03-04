@@ -1,6 +1,7 @@
 package movieimport;
 
 import context.PersistenceContext;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.neo4j.cineasts.domain.Actor;
@@ -43,10 +44,18 @@ public class MovieDbImportServiceTests extends WrappingServerIntegrationTest {
     }
 
     @Test
+    @Ignore
+    public void testImportMovieWithSamePersonAsActorAndDirector() throws Exception {
+        Movie movie = importService.importMovie("200");
+        assertEquals("movie-id", "200", movie.getId());
+        assertEquals("movie-title", "Star Trek: Insurrection", movie.getTitle());
+    }
+
+    @Test
     public void testImportMovieTwice() throws Exception {
-        Movie movie = importService.importMovie("603"); //MOVIE 200 has the same person as director and actor
+        Movie movie = importService.importMovie("603");
         Movie movie2 = importService.importMovie("603");
-        final Movie foundMovie = movieRepository.findById("603"); //findById works??
+        final Movie foundMovie = movieRepository.findById("603");
         assertEquals("movie-id", movie, foundMovie);
     }
 

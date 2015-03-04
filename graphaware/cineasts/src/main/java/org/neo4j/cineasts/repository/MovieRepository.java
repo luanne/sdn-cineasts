@@ -11,13 +11,11 @@ import java.util.List;
  * @since 02.04.11
  */
 public interface MovieRepository extends GraphRepository<Movie> {
-    /*  NamedIndexRepository<Movie>,
-      RelationshipOperationsRepository<Movie> */
     Movie findById(String id);
 
     // Page<Movie> findByTitleLike(String title, Pageable page);
 
-    @Query("MATCH (movie:Movie) WHERE movie.title =~ '.*{0}.*' RETURN movie")
+    @Query("MATCH (movie:Movie) WHERE movie.title =~ '(?i).*{0}.*' RETURN movie")
     Iterable<Movie> findByTitleLike(String title);
 
     @Query( "match (user:User {login: {0}})-[r:RATED]->(movie)<-[r2:RATED]-(other)-[r3:RATED]->(otherMovie) " +

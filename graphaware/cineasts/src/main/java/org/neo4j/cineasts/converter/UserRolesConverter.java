@@ -4,31 +4,28 @@ package org.neo4j.cineasts.converter;
 import org.neo4j.cineasts.domain.User;
 import org.neo4j.ogm.typeconversion.AttributeConverter;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class UserRolesConverter implements AttributeConverter<User.Roles[],String[]> {
+public class UserRolesConverter implements AttributeConverter<User.SecurityRole[],String[]> {
 
 
     @Override
-    public String[] toGraphProperty(User.Roles[] value) {
+    public String[] toGraphProperty(User.SecurityRole[] value) {
         if(value==null) {
             return null;
         }
         String[] values = new String[(value.length)];
         int i=0;
-        for(User.Roles role : value) {
+        for(User.SecurityRole role : value) {
             values[i++]=role.name();
         }
         return values;
     }
 
     @Override
-    public User.Roles[] toEntityAttribute(String[] value) {
-        User.Roles[] roles =new User.Roles[value.length];
+    public User.SecurityRole[] toEntityAttribute(String[] value) {
+        User.SecurityRole[] roles =new User.SecurityRole[value.length];
         int i=0;
         for(String role : value) {
-            roles[i++] = User.Roles.valueOf(role);
+            roles[i++] = User.SecurityRole.valueOf(role);
         }
         return roles;
     }

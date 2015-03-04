@@ -24,6 +24,7 @@
         <security:form-login login-page="/auth/login" authentication-failure-url="/auth/login?login_error=true"
         default-target-url="/user" login-processing-url="/j_spring_security_check" username-parameter="username" password-parameter="password"/>
         <security:logout logout-success-url="/" invalidate-session="true" logout-url="/j_spring_security_logout"/>
+        <security:access-denied-handler error-page="/auth/denied" />
         <security:csrf/>
     </security:http>
 
